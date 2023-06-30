@@ -25,9 +25,3 @@ header = Header('device_id')
 rsp = client.publish_event_sync(header, b'payload')
 print(rsp.text)
 ```
-
-### Publish Event Asynchronously
-
-``` py
-client.publish_event(header, b'payload')
-```
