@@ -4,9 +4,9 @@ The Python Client for W3bstream integration on server
 
 ## Getting started
 
-Install `w3bstream-client-python` via pip
+Install `w3bstream-client-python` via `pip3`
 ``` shell
-pip install w3bstream-client-python
+pip3 install w3bstream-client-python
 ```
 
 
