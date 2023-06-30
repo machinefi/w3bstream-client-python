@@ -7,6 +7,7 @@ The Python Client for W3bstream integration on server
 Install `w3bstream-client-python` via `pip3`
 ``` shell
 pip3 install w3bstream-client-python
+pip3 install typeguard
 ```
 
 
