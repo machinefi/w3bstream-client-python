@@ -15,7 +15,7 @@ pip install w3bstream-client-python
 ### Publish Event Synchronously
 
 ``` py
-from w3bstream_client_python import Client
+from w3bstream_client_python import Client, Header
 
 # the http_route, project and api_key are obtained on W3bstream-Studio
 client = Client("http_route", "project", "api_key")
