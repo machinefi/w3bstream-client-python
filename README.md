@@ -12,13 +12,22 @@ pip install w3bstream-client-python
 
 ## Example Code
 
+### Publish Event Synchronously
+
 ``` py
 from w3bstream_client_python import Client
 
-# the endpoint and api_key are obtained on W3bstream-Studio
-client = Client("endpoint", "api_key") 
-# device_id is the identity for the device, and data is the data from the device. 
-# data can be an empty string if served as a heartbeat
-rsp = client.push_data("device_id", "data")
+# the http_route, project and api_key are obtained on W3bstream-Studio
+client = Client("http_route", "project", "api_key")
+# device_id is the identity for the device
+# payload can be an empty string if served as a heartbeat
+header = Header('device_id')
+rsp = client.publish_event_sync(header, b'payload')
 print(rsp.text)
+```
+
+### Publish Event Asynchronously
+
+``` py
+client.publish_event(header, b'payload')
 ```
