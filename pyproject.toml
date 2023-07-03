@@ -3,8 +3,9 @@ requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "w3bstream" # TBD: change to "w3bstream-client"?
-version = "0.0.3" # TBD
+name = "w3bstream_client_python"
+# version = "0.0.9"
+dynamic = ["version"] # use version from git tag
 authors = [
     {name = "haaai"}, # TODO: add email
     {name = "chenchen", email = "chen1233216@hotmail.com"},
@@ -16,3 +17,5 @@ dependencies = [
     "requests",
     "typeguard",
 ]
+
+[tool.setuptools_scm]
