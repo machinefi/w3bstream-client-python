@@ -4,15 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "w3bstream_client_python"
-# version = "0.0.9"
+# version = "0.4.3"
 dynamic = ["version"] # use version from git tag
-authors = [
-    {name = "haaai"}, # TODO: add email
-    {name = "chenchen", email = "chen1233216@hotmail.com"},
-]
-description = "the Official W3bstream Client for Python"
+description = "Official W3bstream Client for Python"
 readme = "README.md"
-license = {file = "LICENSE"}
+license = "Apache-2.0 license"
 dependencies = [
     "requests",
     "typeguard",
