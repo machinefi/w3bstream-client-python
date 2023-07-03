@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "w3bstream" # TBD: change to "w3bstream-client"?
+version = "0.0.3" # TBD
+authors = [
+    {name = "haaai"}, # TODO: add email
+    {name = "chenchen", email = "chen1233216@hotmail.com"},
+]
+description = "the Official W3bstream Client for Python"
+readme = "README.md"
+license = {file = "LICENSE"}
+dependencies = [
+    "requests",
+    "typeguard",
+]
