@@ -22,9 +22,9 @@ PUBLISH_BATCH_SIZE = 10
 
 @typechecked
 class Client:
-    def __init__(self, url: str, project: str, api_key: str, queue_size: int = 0):
+    def __init__(self, url: str, api_key: str, queue_size: int = 0):
         self.url = url
-        self.project = project
+        # self.project = project
         self.api_key = api_key
         self.queue = queue.Queue(queue_size)
         # self.thread = threading.Thread(target=self._worker)

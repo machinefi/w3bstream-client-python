@@ -18,7 +18,7 @@ pip3 install w3bstream-client-python
 from w3bstream_client_python import Client, Header
 
 # the http_route, project and api_key are obtained on W3bstream-Studio
-client = Client("http_route", "project", "api_key")
+client = Client("http_route", "api_key")
 # device_id is the identity for the device
 # payload can be an empty string if served as a heartbeat
 header = Header('device_id')
