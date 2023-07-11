@@ -17,7 +17,7 @@ class Header:
 
 
 PUBLISH_INTERVAL = 5
-PUBLISH_BATCH_SIZE = 1
+_PUBLISH_BATCH_SIZE = 1
 
 
 @typechecked
