@@ -83,11 +83,11 @@ class Client:
         """
         Fetches a batch of events from the queue.
 
-        Fetches up to PUBLISH_BATCH_SIZE events from the queue.
+        Fetches up to _PUBLISH_BATCH_SIZE events from the queue.
         It will block until at least one event is available.
         """
         count = 0
-        while count < PUBLISH_BATCH_SIZE:
+        while count < _PUBLISH_BATCH_SIZE:
             try:
                 if count == 0:
                     yield self.queue.get()
