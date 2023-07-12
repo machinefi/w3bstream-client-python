@@ -3,6 +3,8 @@ import queue
 import threading
 import time
 import sys
+import json
+import datetime
 
 import requests
 from typeguard import typechecked
@@ -17,7 +19,8 @@ class Header:
 
 
 PUBLISH_INTERVAL = 5
-_PUBLISH_BATCH_SIZE = 1
+PUBLISH_BATCH_SIZE = 10
+_DATA_PUSH_EVENT_TYPE = "$DATA#PUSH"
 
 
 @typechecked
@@ -56,7 +59,7 @@ class Client:
             return True
         except queue.Full:
             sys.stderr.write(
-                "The queue is full when publishing the data to W3bstream")
+                "the queue is full when publishing the data to W3bstream")
             return False
 
     def _worker(self):
@@ -75,7 +78,7 @@ class Client:
             if resp.status_code >= 400:
                 # TODO: Support retry mechanism when failed to publish
                 sys.stderr.write(
-                    "An error occurred when publishing the data to W3bstream: status_code %d, body: %s" % (resp.status_code, resp.text))
+                    "an error occurred when publishing the data to W3bstream: status_code %d, body: %s" % (resp.status_code, resp.text))
             # sleep interval
             time.sleep(PUBLISH_INTERVAL)
 
@@ -83,11 +86,11 @@ class Client:
         """
         Fetches a batch of events from the queue.
 
-        Fetches up to _PUBLISH_BATCH_SIZE events from the queue.
+        Fetches up to PUBLISH_BATCH_SIZE events from the queue.
         It will block until at least one event is available.
         """
         count = 0
-        while count < _PUBLISH_BATCH_SIZE:
+        while count < PUBLISH_BATCH_SIZE:
             try:
                 if count == 0:
                     yield self.queue.get()
@@ -98,15 +101,11 @@ class Client:
                 break
 
     def _publish_event(self, events: list) -> requests.Response:
-        meta_data = events[0]
         headers = {
             'Authorization': 'Bearer ' + self.api_key,
             'Content-Type': 'application/octet-stream',
         }
-
-        device_id = meta_data["device_id"]
-        event_type = meta_data["event_type"]
-        timestamp = meta_data["timestamp"]
-        url = f"{self.url}?device_id={device_id}&eventType={event_type}&timestamp={timestamp}"
-        data_bytes = meta_data["payload"].encode('utf-8')
+        timestamp = int(round(datetime.datetime.now().timestamp()))
+        url = f"{self.url}?eventType={_DATA_PUSH_EVENT_TYPE}&timestamp={timestamp}"
+        data_bytes = json.dumps(events)
         return requests.post(url, data=data_bytes,  headers=headers)
