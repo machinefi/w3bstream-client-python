@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "w3bstream_client_python"
-version = "1.0.0"
+version = "1.0.1"
 # dynamic = ["version"] use version from git tag
 description = "Official W3bstream Client for Python"
 readme = "README.md"
