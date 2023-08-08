@@ -10,8 +10,6 @@ import client
 
 class TestClient(unittest.TestCase):
     def setUp(self):
-        # self.client = Client(url='https://dev.w3bstream.com/api/w3bapp/event/eth_0xb8b26dc52c30952793c8218edc37df2f8d9d9292_hello_world', api_key='w3b_MV8xNjkxNDE2MTI5X1g8KCAxfV1zVkBlYg')
-        # self.client = Client(url='https://devnet-prod.w3bstream.com/api/w3bapp/event/eth_0x042396f51b99a7b7a18968283257b791c5e17541_helloworld', api_key='w3b_MV8xNjkxNDY5NDk3X25sSCFTJ2BeWjlkcQ')
         self.send_count = 0
 
     def qtest_publish_event_sync(self):
