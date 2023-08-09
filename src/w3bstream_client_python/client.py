@@ -1,13 +1,13 @@
 import datetime
 import queue
 import threading
-import time
 import sys
 import json
 import datetime
 
 import requests
 from typeguard import typechecked
+from requests.adapters import HTTPAdapter
 
 
 @typechecked
@@ -18,19 +18,24 @@ class Header:
         self.timestamp = timestamp
 
 
-PUBLISH_INTERVAL = 5
-PUBLISH_BATCH_SIZE = 10
+PUBLISH_BATCH_SIZE = 100
 _DATA_PUSH_EVENT_TYPE = "DA-TA_PU-SH"
 
 
 @typechecked
 class Client:
-    def __init__(self, url: str, api_key: str, queue_size: int = 0):
+    def __init__(self, url: str, api_key: str, queue_size: int = 0, callback_async=None, worker: int=2):
         self.url = url
         self.api_key = api_key
         self.queue = queue.Queue(queue_size)
-        self.thread = threading.Thread(target=self._worker, daemon=True)
-        self.thread.start()
+        self.callback_async = callback_async
+        for i in range(worker):
+            thread = threading.Thread(target=self._worker, daemon=True)
+            thread.start()
+        self.session = requests.Session()
+        adapter = HTTPAdapter(pool_connections=100, pool_maxsize=100)
+        self.session.mount('http://', adapter)
+        self.session.mount('https://', adapter)
 
     def publish_event_sync(self, header: Header, payload: bytes) -> requests.Response:
         """
@@ -75,12 +80,16 @@ class Client:
                 })
             # publish events
             resp = self._publish_event(events)
+            if self.callback_async is not None:
+                try:
+                    self.callback_async(events, resp)
+                except Exception as e:
+                    sys.stderr.write(
+                        "an error occurred when calling the callback: %s" % e)
             if resp.status_code >= 400:
                 # TODO: Support retry mechanism when failed to publish
                 sys.stderr.write(
                     "an error occurred when publishing the data to W3bstream: status_code %d, body: %s" % (resp.status_code, resp.text))
-            # sleep interval
-            time.sleep(PUBLISH_INTERVAL)
 
     def _fetch_event_batch(self):
         """
@@ -108,4 +117,4 @@ class Client:
         timestamp = int(round(datetime.datetime.now().timestamp()))
         url = f"{self.url}?eventType={_DATA_PUSH_EVENT_TYPE}&timestamp={timestamp}"
         data_bytes = json.dumps(events)
-        return requests.post(url, data=data_bytes,  headers=headers)
+        return self.session.post(url, data=data_bytes,  headers=headers)
